@@ -1,0 +1,140 @@
+body,p,h1,h2,h3{margin:0;padding:0}
+ul,li,a,img,span,input{margin:0;display:block;}
+a{text-decoration:none;margin:0;}
+a,input,div,span,table{font-size:12px;color:#666666;}
+.clearfix{clear:both;}
+body{background:#3d5267;min-width:1024px;}
+/*背景*/
+.bg_box{background:url(images/bg.png) no-repeat center;position:relative;z-index:0;width:100%;padding-bottom:20px;}
+/*logo、导航*/
+.logo_box{width:1024px;margin:0 auto;padding:20px 0;}
+.logo_box img{margin-left:14px;}
+.menu_box{width:100%;height:40px;background:#059df5;}
+.menu_box span{float:left;line-height:40px;color:#fff;font-size:16px;padding:0 24px;border-left:1px solid #a1dafb;font-family:"微软雅黑"}
+.menu_box span:hover{background:#0d5c98;}
+.menu_cur{background:#0d5c98;}
+.menu_box span img{float:left;margin-right:8px;margin-top:9px;}
+.menu{width:1024px;margin:0 auto}
+/*index-预报*/
+.container,.report_box,.column_title,.focus_box{width:1024px;margin:0 auto;}
+.report_box,.focus_box{margin-top:20px;}
+.column_title{height:40px;background:url(images/column_title_bg.png);}
+.column_title span{color:#fff;font-size:14px;line-height:40px;}
+.column_name{float:left;margin-left:24px;}
+.column_more{float:right;margin-right:24px;}
+.report_menu{background:#fff;height:34px;}
+.report_menu span{float:left;width:250px;background:#d7f0ff;border:1px solid #b9e5ff;line-height:34px;text-align:center;color:#0885d3;font-size:14px;border-bottom:1px solid #066195;cursor:pointer;}
+.report_menu .report_cur{background:#fff;border:1px solid #066195;border-bottom:1px solid #fff;}
+.report_img{width:100%;height:460px;backgroungd:#fff;overflow:hidden;background:#fff;}
+.report_img img{margin:0 auto;}
+/*index-重点保障区*/
+.focus_map{width:100%;height:200px;background:#fff;}
+.map_each{float:left;margin:37px 15px 0 15px;}
+.map_each div{width:168px;height:98px;overflow:hidden;border:1px solid #056daa;}
+.map_each span{text-align:center;color:#3c9ef1;font-size:14px;margin-top:12px;}
+/*二级页面（海面风）-左侧日期*/
+.container_left{float:left;margin-top:10px;width:264px;height:612px;border-right:2px solid #cbcccc}
+.container_left span,.container_left .date_more,.focus_left span{background:#f3f3f3;border-top:1px solid #fff;border-bottom:1px solid #d8d8d8;width:240px;height:34px;color:#4c4c4c;font-size:14px;line-height:36px;padding-left:24px;cursor:pointer;}
+.container_left h3{background:#677b8d;color:#fff;width:240px;line-height:36px;padding-left:24px;font-size:16px;}
+.container_left .date_cur{background:#a6a29c;border-top:1px solid #fff;border-bottom:1px solid #827e77;color:#fff;}
+.container_left .date_more{color:#0e99dd;text-decoration:underline;}
+/*二级页面（海面风）-右侧图片*/
+.container_right{float:right;width:758px;margin-top:10px}
+.hours_box{background:#91a4ae;height:60px;}
+.hours_box .animate_btn{float:left;text-align:center;background:#ffb83d;color:#fff;width:64px;line-height:26px;border-radius:6px;border:none;margin:16px 7px 0 7px;}
+.hours_box .hours{width:680px;float:left;margin-top:8px;}
+.hours_box .animate_btn:hover{background:#fdab1e;cursor:pointer;}
+.hours span{float:left;width:40px;margin:1px 2px;padding:0 4px;line-height:20px;cursor:pointer;color:#fff;}
+.hours span:hover{background:#3b454b;}
+.hours .hours_cur{background:#3b454b;}
+.seaImg_box{height:550px;border-bottom:2px solid #cbcccc;background:#fff;}
+/*二级页面（重点保障区）*/
+.map_box{width:100%;padding:10px 0;background:#fff;}
+.map_box img{margin:0 auto}
+.focus_left{float:left;margin:10px 0 0 20px;border:1px solid #b2b2b2;width:264px;height:520px;background:#fff;}
+.focus_left .focusLeft_cur{background:#059df5;border-top:1px solid #fff;border-bottom:1px solid #1283c5;color:#fff;}
+.focus_right{float:right;margin:10px 20px 0 0;width:698px;background:#fff;}
+.focus_title {width:200px;height:28px;border:1px solid #305981;border-radius:4px;}
+.focus_title span{width:100px;float:left;text-align:center;line-height:28px;color:#3d5872;font-size:14px;cursor:pointer;border-radius:2px;}
+.focus_title .focusTitle_cur{background:#336aa0;color:#fff;}
+.focus_img{width:696px;border:1px solid #b2b2b2;height:400px;margin-top:14px;}
+
+
+.myButton {
+    -moz-box-shadow:inset 0px 1px 0px 0px #ffffff;
+    -webkit-box-shadow:inset 0px 1px 0px 0px #ffffff;
+    box-shadow:inset 0px 1px 0px 0px #ffffff;
+    background:-webkit-gradient(linear, left top, left bottom, color-stop(0.05, #ffffff), color-stop(1, #f6f6f6));
+    background:-moz-linear-gradient(top, #ffffff 5%, #f6f6f6 100%);
+    background:-webkit-linear-gradient(top, #ffffff 5%, #f6f6f6 100%);
+    background:-o-linear-gradient(top, #ffffff 5%, #f6f6f6 100%);
+    background:-ms-linear-gradient(top, #ffffff 5%, #f6f6f6 100%);
+    background:linear-gradient(to bottom, #ffffff 5%, #f6f6f6 100%);
+    filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffff', endColorstr='#f6f6f6',GradientType=0);
+    background-color:#ffffff;
+    border:1px solid #dcdcdc;
+    display:inline-block;
+    cursor:pointer;
+    color:#666666;
+    font-family:Arial;
+    font-size:15px;
+    font-weight:bold;
+    padding:2px 16px;
+    text-decoration:none;
+    text-shadow:0px 1px 0px #ffffff;
+}
+.myButton:hover {
+    background:-webkit-gradient(linear, left top, left bottom, color-stop(0.05, #f6f6f6), color-stop(1, #ffffff));
+    background:-moz-linear-gradient(top, #f6f6f6 5%, #ffffff 100%);
+    background:-webkit-linear-gradient(top, #f6f6f6 5%, #ffffff 100%);
+    background:-o-linear-gradient(top, #f6f6f6 5%, #ffffff 100%);
+    background:-ms-linear-gradient(top, #f6f6f6 5%, #ffffff 100%);
+    background:linear-gradient(to bottom, #f6f6f6 5%, #ffffff 100%);
+    filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#f6f6f6', endColorstr='#ffffff',GradientType=0);
+    background-color:#f6f6f6;
+}
+.myButton:active {
+    position:relative;
+    top:1px;
+}
+.myButton1 {
+    -moz-box-shadow:inset 0px 1px 0px 0px #ffffff;
+    -webkit-box-shadow:inset 0px 1px 0px 0px #ffffff;
+    box-shadow:inset 0px 1px 0px 0px #ffffff;
+    background:-webkit-gradient(linear, left top, left bottom, color-stop(0.05, #d6d6d6), color-stop(1, #f6f6f6));
+    background:-moz-linear-gradient(top, #d6d6d6 5%, #f6f6f6 100%);
+    background:-webkit-linear-gradient(top, #d6d6d6 5%, #f6f6f6 100%);
+    background:-o-linear-gradient(top, #d6d6d6 5%, #f6f6f6 100%);
+    background:-ms-linear-gradient(top, #d6d6d6 5%, #f6f6f6 100%);
+    background:linear-gradient(to bottom, #d6d6d6 5%, #f6f6f6 100%);
+    filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#d6d6d6', endColorstr='#f6f6f6',GradientType=0);
+    background-color:#d6d6d6;
+    border:1px solid #dcdcdc;
+    display:inline-block;
+    cursor:pointer;
+    color:#666666;
+    font-family:Arial;
+    font-size:15px;
+    font-weight:bold;
+    padding:2px 11px;
+    text-decoration:none;
+    text-shadow:0px 1px 0px #ffffff;
+}
+.myButton1:hover {
+    background:-webkit-gradient(linear, left top, left bottom, color-stop(0.05, #f6f6f6), color-stop(1, #d6d6d6));
+    background:-moz-linear-gradient(top, #f6f6f6 5%, #d6d6d6 100%);
+    background:-webkit-linear-gradient(top, #f6f6f6 5%, #d6d6d6 100%);
+    background:-o-linear-gradient(top, #f6f6f6 5%, #d6d6d6 100%);
+    background:-ms-linear-gradient(top, #f6f6f6 5%, #d6d6d6 100%);
+    background:linear-gradient(to bottom, #f6f6f6 5%, #d6d6d6 100%);
+    filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#f6f6f6', endColorstr='#d6d6d6',GradientType=0);
+    background-color:#f6f6f6;
+}
+.myButton1:active {
+    position:relative;
+    top:1px;
+}
+
+
+
+
