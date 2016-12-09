@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * 统计数据信息
+ * 统计数据信息 主要用于前台统计图
  * Created by Sofar on 2016/12/7.
  */
 public class StatData {

@@ -1,6 +1,6 @@
-package com.xinyuan.common.gis.wrapper;
+package com.xinyuan.common.gis.utils;
 
-import com.xinyuan.common.gis.wrapper.Point;
+import com.xinyuan.common.gis.utils.Point;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -91,4 +91,6 @@ public class Region {
             this.level = level;
         }
     }
+
+
 }

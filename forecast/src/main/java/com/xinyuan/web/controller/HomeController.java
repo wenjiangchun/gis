@@ -4,8 +4,8 @@ import com.xinyuan.common.gis.Factor;
 import com.xinyuan.common.gis.StatData;
 import com.xinyuan.common.gis.config.ConfigLoader;
 import com.xinyuan.common.gis.utils.GisDataUtils;
-import com.xinyuan.common.gis.wrapper.GisDataWrapper;
-import com.xinyuan.common.gis.wrapper.Region;
+import com.xinyuan.common.gis.utils.GisDataWrapper;
+import com.xinyuan.common.gis.utils.Region;
 import com.xinyuan.common.utils.HazeDateUtils;
 import com.xinyuan.common.utils.HazeStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -82,6 +82,7 @@ public class HomeController {
         //加载所有区域信息
         model.addAttribute("regions", ConfigLoader.getRegionByLevel(Region.RegionLevel.AREA.level));
         model.addAttribute("level", Region.RegionLevel.AREA.level);
+        model.addAttribute("config", configLoader);
         return "areaRegions";
     }
 
@@ -98,6 +99,7 @@ public class HomeController {
         model.addAttribute("level", Region.RegionLevel.CITY.level);
         model.addAttribute("regionCode", "");
         model.addAttribute("factors", Factor.values());
+        model.addAttribute("config", configLoader);
         return "showCityRegion";
     }
 
@@ -105,6 +107,7 @@ public class HomeController {
     public String showRegion(String regionCode, Model model) {
         model.addAttribute("regionCode", regionCode);
         model.addAttribute("factors", Factor.values());
+        model.addAttribute("config", configLoader);
         return "showRegion";
     }
 

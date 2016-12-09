@@ -5,7 +5,7 @@
 <html>
 <head>
     <title>重点保障区</title>
-    <script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=D1rLgwbOSvfBfyTUyR0fGSE0lSv66lHm"></script>
+    <script type="text/javascript" src="${config.bMapUrl}"></script>
     <script src="http://api.map.baidu.com/library/EventWrapper/1.2/src/EventWrapper.min.js" type="text/javascript"></script>
     <link rel="stylesheet" href="${ctx}/resources/tablecloth/tablecloth.css" />
     <script type="text/javascript" src="${ctx}/resources/tablecloth/tablecloth.js"></script>
@@ -20,12 +20,13 @@
         <c:forEach items="${factors}" var="factor">
             <span onclick="getRegionPicture('${factor}')" name="${factor}">${factor.title}</span>
         </c:forEach>
-
     </div>
     <div class="focus_right">
         <div class="focus_title">
-            <span class="focusTitle_cur" name="picture">场图</span>
-            <span name="table">数值</span>
+            <span class="focusTitle_cur" name="picture"><i class="fa fa-picture-o" aria-hidden="true"></i>
+场图</span>
+            <span name="table"><i class="fa fa-line-chart" aria-hidden="true"></i>
+数值</span>
         </div>
         <div class="focus_img" style="height: 530px">
         </div>
@@ -43,10 +44,10 @@
     map.addControl(new BMap.NavigationControl());
     map.addControl(new BMap.ScaleControl());
     map.addControl(new BMap.OverviewMapControl());
-    map.addControl(new BMap.MapTypeControl({mapTypes: [BMAP_HYBRID_MAP]}));
+    //map.addControl(new BMap.MapTypeControl({mapTypes: [BMAP_HYBRID_MAP]}));
     map.enableScrollWheelZoom();
-    map.setMinZoom(8);
-    map.setMaxZoom(10);
+    map.setMinZoom(9);
+    map.setMaxZoom(12);
     map.centerAndZoom(new BMap.Point(120, 40), 9);
     $(function() {
         //加载区域位置信息
@@ -79,9 +80,15 @@
                                 var marker = new BMap.Marker(new BMap.Point(point.x, point.y));
                                 var label = new BMap.Label(name, {position: new BMap.Point(point.x, point.y)});
                                 label.setStyle({
+                                    color: "#f86f06",
                                     fontSize: "14px",
-                                    borderColor: "#FAF1D2",
-                                    opacity: 0.8
+                                    height: "20px",
+                                    lineHeight: "20px",
+                                    fontFamily: "微软雅黑",
+                                    fontWeight: "bold",
+                                    //borderStyle: "none",
+                                    borderColor: "#f8a01d",
+                                    //backgroundColor:"transparent"
                                 });
                                 label.setOffset(new BMap.Size(-30, -50));
                                 map.addOverlay(marker);
@@ -96,23 +103,28 @@
                                     }
                                 break;
                             case 2:
-                                //加载线
+                                //加载线 将线转换为园
                                 var points = [];
                                 points.push(new BMap.Point(pointList[0].x, pointList[0].y));
                                 points.push(new BMap.Point(pointList[1].x, pointList[1].y));
                                 var polyline = new BMap.Polyline(points, {strokeColor:"red", strokeWeight:4, strokeOpacity:0.8, strokeStyle:"dashed"});
+                                var center = polyline.getBounds().getCenter();
+                                polyline = new BMap.Circle(center, 5000,{strokeColor:"red", strokeWeight:4, strokeOpacity:0.5});
                                 map.addOverlay(polyline);
                                 var center = polyline.getBounds().getCenter();
                                 var label = new BMap.Label(name, {position: center});
                                 label.setStyle({
+                                    color: "#f86f06",
                                     fontSize: "14px",
-                                    color: "#FAF1D2",
-                                    fontWeight:"bold",
-                                    borderColor: "transparent",
-                                    backgroundColor:"transparent"
-                                    //opacity: 0.9
+                                    height: "20px",
+                                    lineHeight: "20px",
+                                    fontFamily: "微软雅黑",
+                                    fontWeight: "bold",
+                                    //borderStyle: "none",
+                                    borderColor: "#f8a01d",
+                                    //backgroundColor:"transparent"
                                 });
-                                label.setOffset(new BMap.Size(-30, -10));
+                                label.setOffset(new BMap.Size(-30, -20));
                                 map.addOverlay(label);
                                 polyline.code = region.code;
                                 polyline.name = region.name;
@@ -162,10 +174,11 @@
         clear();
         $.get("${ctx}/getRegionPicture", {regionCode:regionCode, factor:factor}, function(data) {
             var pictures = data.picture;
+            var $img = $("<img>");
+            $(".focus_img").append($img);
+            $(".focus_img").find("img").attr("src", "${ctx}/resources/style/images/nodata1.jpg").css({width:"100%", height:"100%"});
             if (pictures.length > 0) {
                 var i = 0;
-                var $img = $("<img>");
-                $(".focus_img").append($img);
                 clearIntervalId = setInterval(function() {
                     $(".focus_img").find("img").attr("src", pictures[i]).css({width:700,height:470});
                     i ++;
@@ -404,30 +417,35 @@
         $tbDiv.append("<button onclick='showData(6, 12, this)' style='float: right; margin-bottom: 3px' class='myButton'>24-48小时</button>");
         $tbDiv.append("<button onclick='showData(0, 6, this)' style='float: right; margin-bottom: 3px' class='myButton1'>0-24小时</button>");
         var $table = $("<table>").css({cellspacing:"0", cellpadding:"0"});
-        var rowCount = 73 / 8;
-        for (var i = 0; i < rowCount; i++) {
-            var $tr1 = $("<tr>");
-            var $tr2 = $("<tr>");
-            $table.append($tr1);
-            $table.append($tr2);
-        }
-        $tbDiv.append($table);
-        for (var i = 0; i < data.length; i++) {
-            //创建一个TR
-            if (i > 71) {
-                break;
+        if (data.length > 0) {
+            var rowCount = 73 / 8;
+            for (var i = 0; i < rowCount; i++) {
+                var $tr1 = $("<tr>");
+                var $tr2 = $("<tr>");
+                $table.append($tr1);
+                $table.append($tr2);
             }
-            var rowNum = parseInt((i / 8)) * 2;
-            var $tr1 = $table.find("tr").eq(rowNum);
-            var $tr2 = $table.find("tr").eq(rowNum + 1);
-            if (i % 8 == 0) {
-                $tr1.append("<th>" + "时间" + "</th>");
-                $tr2.append("<th>" + rawData.legend[0] + "</th>");
+            $tbDiv.append($table);
+            for (var i = 0; i < data.length; i++) {
+                //创建一个TR
+                if (i > 71) {
+                    break;
+                }
+                var rowNum = parseInt((i / 8)) * 2;
+                var $tr1 = $table.find("tr").eq(rowNum);
+                var $tr2 = $table.find("tr").eq(rowNum + 1);
+                if (i % 8 == 0) {
+                    $tr1.append("<th>" + "时间" + "</th>");
+                    $tr2.append("<th>" + rawData.legend[0] + "</th>");
+                }
+                $tr1.append("<th>" + data[i][0] + "</th>");
+                $tr2.append("<td>" + data[i][1] + "</td>");
             }
-            $tr1.append("<th>" + data[i][0] + "</th>");
-            $tr2.append("<td>" + data[i][1] + "</td>");
+            showData(0,6, null);
+        } else {
+            //禁用按钮
+            $("#tbDiv").find("button").css("display", "none");
         }
-        showData(0,6, null);
     }
 
     function showData(start, end, obj) {

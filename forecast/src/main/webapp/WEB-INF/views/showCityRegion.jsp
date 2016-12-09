@@ -22,8 +22,10 @@
     </div>
     <div class="focus_right hide">
         <div class="focus_title">
-            <span class="focusTitle_cur" name="picture">场图</span>
-            <span name="table">数值</span>
+           <span class="focusTitle_cur" name="picture"><i class="fa fa-picture-o" aria-hidden="true"></i>
+场图</span>
+            <span name="table"><i class="fa fa-line-chart" aria-hidden="true"></i>
+数值</span>
         </div>
         <div class="focus_img" style="height: 530px">
         </div>
@@ -152,7 +154,7 @@
                     content += "<tr><th width='60px'>" + dataArr[0] + "</th><td>" + dataArr[1] + "</td></tr>";
                 }
             } else {
-                content += "<tr><td>暂无数据</td></tr>";
+                content += "<tr><td><span><i class=\"fa fa-exclamation-triangle\" aria-hidden=\"true\"></i>暂无数据</span></td></tr>";
             }
             content += "</table>";
             infoWindow.setContent(content);

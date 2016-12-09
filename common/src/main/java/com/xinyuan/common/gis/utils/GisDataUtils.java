@@ -7,7 +7,6 @@ import com.xinyuan.common.gis.StatData;
 import com.xinyuan.common.gis.StatResult;
 import com.xinyuan.common.gis.WindLevel;
 import com.xinyuan.common.gis.config.ConfigLoader;
-import com.xinyuan.common.gis.wrapper.GisDataWrapper;
 import com.xinyuan.common.utils.HazeDateUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.Header;

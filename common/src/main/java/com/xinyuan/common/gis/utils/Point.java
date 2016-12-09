@@ -1,4 +1,4 @@
-package com.xinyuan.common.gis.wrapper;
+package com.xinyuan.common.gis.utils;
 
 /**
  * 坐标点
@@ -25,6 +25,14 @@ public class Point {
 
     public void setY(String y) {
         this.y = y;
+    }
+
+    @Override
+    public String toString() {
+        return "Point{" +
+                "x='" + x + '\'' +
+                ", y='" + y + '\'' +
+                '}';
     }
 }
 

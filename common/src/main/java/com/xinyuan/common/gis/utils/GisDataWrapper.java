@@ -1,4 +1,4 @@
-package com.xinyuan.common.gis.wrapper;
+package com.xinyuan.common.gis.utils;
 
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 

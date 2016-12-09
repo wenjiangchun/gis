@@ -6,7 +6,7 @@ import com.xinyuan.common.utils.HazeDateUtils;
 import com.xinyuan.common.gis.config.ConfigLoader;
 import com.xinyuan.common.gis.Factor;
 import com.xinyuan.common.gis.utils.GisDataUtils;
-import com.xinyuan.common.gis.wrapper.GisDataWrapper;
+import com.xinyuan.common.gis.utils.GisDataWrapper;
 import com.xinyuan.common.gis.StatResult;
 import com.xinyuan.common.gis.WaveLevel;
 import org.apache.commons.lang3.StringUtils;
