@@ -22,7 +22,7 @@
 	<div class="right">
 		<div class="nav">
 			<div class="A" onclick="showDynamicImg()" style="cursor: pointer">
-				<div ></div>
+				<div class="start"></div>
 			</div>
 			<div class="B">
 				<table cellspacing="5" class="B1 table">
@@ -78,6 +78,7 @@
             });
             $(this).addClass("biaodanclick");
             getData($(this).attr("value"));
+            $(".A").find("div").removeClass("stop").addClass("start");
         });
         //点击第一个
         $("li[class=biaodan]").eq(0).click();
@@ -119,6 +120,7 @@
             getPicture(hour);
             $(".td01").css("background","");
             $(this).css("background","#3b454b");
+            $(".A").find("div").removeClass("stop").addClass("start");
         });
     }
 
@@ -126,9 +128,11 @@
     function showDynamicImg() {
         $(".td01").css("background","");
         if (clearIntervalId != null) {
+            $(".A").find("div").removeClass("stop").addClass("start");
             clearInterval(clearIntervalId);
             clearIntervalId = null;
         } else {
+            $(".A").find("div").removeClass("start").addClass("stop");
             var i = 0;
             clearIntervalId = setInterval(function() {
                 getPicture(i);

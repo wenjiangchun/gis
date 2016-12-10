@@ -5,8 +5,7 @@
 <html>
 <head>
     <title>渔业安全预警报系统</title>
-    <script type="text/javascript"
-            src="http://api.map.baidu.com/api?v=2.0&ak=D1rLgwbOSvfBfyTUyR0fGSE0lSv66lHm"></script>
+    <script type="text/javascript" src="${config.bMapUrl}"></script>
 </head>
 <body>
 <div class="main">
@@ -15,30 +14,30 @@
         <table class="B2" cellspacing="0" cellpadding="0">
             <caption
                     style="background: #47A6F6;color: #f1f1f1; font-size: 16px;font-weight: bold;padding: 10px; text-align:left"></caption>
-            <tr>
-                <td class="td02" style="background-color:#e8f4ff">时间</td>
-                <td class="td02" style="background-color:#e8f4ff">${one} 0时 - ${one} 23时</td>
-                <td class="td02" style="background-color:#e8f4ff">${two} 0时 - ${two} 23时
+            <tr style="height: 30px; font-weight: bold">
+                <td class="td02" style="background-color:#e8f4ff;">时间</td>
+                <td class="td02" style="background-color:#e8f4ff">${one}</td>
+                <td class="td02" style="background-color:#e8f4ff">${two}
                 </td>
-                <td class="td02" style="background-color:#e8f4ff">${three} 0时 - ${three} 23时</td>
+                <td class="td02" style="background-color:#e8f4ff">${three}</td>
             </tr>
-            <tr>
-                <td class="td02" style="background-color:#e8f4ff">浪高（米）</td>
-                <td class="td02">-/-/-</td>
-                <td class="td02">-/-/-</td>
-                <td class="td02">-/-/-</td>
+            <tr style="height: 20px;">
+                <td class="td02" style="background-color:#e8f4ff">浪高（米<br>(浪高/浪级)</td>
+                <td class="td02">-/-</td>
+                <td class="td02">-/-</td>
+                <td class="td02">-/-</td>
             </tr>
-            <tr>
-                <td class="td02" style="background-color:#e8f4ff">风速（米/秒）</td>
-                <td class="td02">-/-/-</td>
-                <td class="td02">-/-/-</td>
-                <td class="td02">-/-/-</td>
+            <tr style="height: 20px;">
+                <td class="td02" style="background-color:#e8f4ff">风速（米/秒<br>(风速/风级)</td>
+                <td class="td02">-/-</td>
+                <td class="td02">-/-</td>
+                <td class="td02">-/-</td>
             </tr>
-            <tr>
+            <tr style="height: 20px;">
                 <td class="td02" style="background-color:#e8f4ff">潮高（米）</td>
-                <td class="td02">-/-/-</td>
-                <td class="td02">-/-/-</td>
-                <td class="td02">-/-/-</td>
+                <td class="td02">-/-</td>
+                <td class="td02">-/-</td>
+                <td class="td02">-/-</td>
             </tr>
         </table>
     </div>
@@ -49,13 +48,18 @@
     map.addControl(new BMap.NavigationControl());
     map.addControl(new BMap.ScaleControl());
     map.addControl(new BMap.OverviewMapControl());
-    map.addControl(new BMap.MapTypeControl({mapTypes: [BMAP_HYBRID_MAP]}));
-    map.enableScrollWheelZoom();
+    //map.enableScrollWheelZoom();
     map.setMinZoom(7);
     map.setMaxZoom(10);
-    $.getJSON("${ctx}/resources/region.json", function (data) {
-        dataPoint = data.dataPoint;
-        dataPloygon = data.dataPolygon;
+    map.centerAndZoom(new BMap.Point(120, 40), 9);
+    $.getJSON("${ctx}/getRegions", function (data) {
+        for (var i = 0; i < data.length; i++) {
+            if (data[i].pointList.length == 1) {
+                dataPoint.push(data[i]);
+            } else {
+                dataPloygon.push(data[i]);
+            }
+        }
         showPloygon();
     });
 
@@ -111,11 +115,13 @@
     var myZoomCtrl = new ZoomControl();
     // 添加到地图当中
     map.addControl(myZoomCtrl);
+
+
     function showPloygon() {
         map.clearOverlays();
         var center = null;
         for (var i = 0; i < dataPloygon.length; i++) {
-            var points = dataPloygon[i].points;
+            var points = dataPloygon[i].pointList;
             var mapPoints = new Array();
             for (var j = 0; j < points.length; j++) {
                 mapPoints.push(new BMap.Point(points[j].x, points[j].y));
@@ -148,6 +154,15 @@
             polygon.label = label;
             map.addOverlay(polygon);
             map.addOverlay(label);
+            if (i == 0) {
+                getDate(polygon.code, polygon.name);
+                polygon.setFillColor("#fff");
+                polygon.label.setStyle({
+                    color: "#636363"
+                    //opacity: 0.9
+                });
+            }
+
         }
         map.centerAndZoom(center, 7);
     }
@@ -156,29 +171,43 @@
         map.clearOverlays();
         var center = null;
         for (var i = 0; i < dataPoint.length; i++) {
-            var point = dataPoint[i];
+            var region = dataPoint[i];
+            var point = dataPoint[i].pointList[0];
             // var myIcon = new BMap.Icon("${ctx}/resources/style/images/foo.png", new BMap.Size(200,200));
             var marker = new BMap.Marker(new BMap.Point(point.x, point.y));
-            var label = new BMap.Label(point.name, {position: new BMap.Point(point.x, point.y)});
+            var label = new BMap.Label(region.name, {position: new BMap.Point(point.x, point.y)});
             label.setStyle({
+                color: "#f86f06",
                 fontSize: "14px",
-                borderColor: "#FAF1D2",
-                opacity: 0.8
+                height: "20px",
+                lineHeight: "20px",
+                fontFamily: "微软雅黑",
+                fontWeight: "bold",
+                //borderStyle: "none",
+                borderColor: "#f8a01d",
+                //backgroundColor:"transparent"
             });
             label.setOffset(new BMap.Size(-30, -50));
-            marker.code = point.code;
+            marker.code = region.code;
             marker.type = "point";
-            marker.name = point.name;
+            marker.name = region.name;
             marker.addEventListener("click", function (type, target, point, pixel) {
                 getDate(this.code, this.name);
             });
             map.addOverlay(marker);
             map.addOverlay(label);
             if (i == 4) {
-                center = new BMap.Point(point.x, point.y);
+                //center = new BMap.Point(point.x, point.y);
+                //map.centerAndZoom(center, 9);
+            }
+            if (i == 0) {
+                getDate(marker.code, marker.name);
+                marker.setAnimation(BMAP_ANIMATION_BOUNCE);
+                //获取中间点
+                map.centerAndZoom(marker.getPosition(), 9);
             }
         }
-        map.centerAndZoom(center, 9);
+
     }
 
     function getDate(region, name) {
@@ -203,6 +232,7 @@
                     overlay.setAnimation(null);
                     if (overlay.code == region) {
                         overlay.setAnimation(BMAP_ANIMATION_BOUNCE);
+                        map.panTo(overlay.getPosition());
                     }
                 }
             }
@@ -230,7 +260,8 @@
                     var level = wavData.result.level;
                     var wavDirectionMax = wavData.result.waveDirectionMax;
                     var index = 3 - i;
-                    $table.find("tr").eq(1).find("td").eq(index).html(wavHeightMax + "/" + level + "/" + wavDirectionMax);
+                   // $table.find("tr").eq(1).find("td").eq(index).html(wavHeightMax + "/" + level + "/" + wavDirectionMax);
+                    $table.find("tr").eq(1).find("td").eq(index).html(wavHeightMax + "/" + level + "(级)");
                 }
                 for (var i = 0; i < sswDatas.length; i++) {
                     var sswData = sswDatas[i];
@@ -238,6 +269,7 @@
                     var level = sswData.result.level;
                     var directionMax = sswData.result.directionMax;
                     var index = 3 - i;
+                    //$table.find("tr").eq(2).find("td").eq(index).html(rapidMax + "/" + level + "/" + directionMax);
                     $table.find("tr").eq(2).find("td").eq(index).html(rapidMax + "/" + level + "/" + directionMax);
                 }
             }

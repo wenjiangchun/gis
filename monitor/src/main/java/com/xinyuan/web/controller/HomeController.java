@@ -1,26 +1,13 @@
 package com.xinyuan.web.controller;
 
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.xinyuan.common.gis.StatResult;
+import com.xinyuan.common.gis.WaveLevel;
+import com.xinyuan.common.gis.utils.Region;
 import com.xinyuan.common.utils.HazeDateUtils;
 import com.xinyuan.common.gis.config.ConfigLoader;
 import com.xinyuan.common.gis.Factor;
 import com.xinyuan.common.gis.utils.GisDataUtils;
 import com.xinyuan.common.gis.utils.GisDataWrapper;
-import com.xinyuan.common.gis.StatResult;
-import com.xinyuan.common.gis.WaveLevel;
-import org.apache.commons.lang3.StringUtils;
-import org.apache.http.Header;
-import org.apache.http.HttpEntity;
-import org.apache.http.HttpResponse;
-import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.ResponseHandler;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.impl.client.HttpClients;
-import org.apache.http.util.EntityUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -41,8 +28,6 @@ import java.util.Map;
 @Controller
 public class HomeController {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(HomeController.class);
-
     @Autowired
     private ConfigLoader config;
 
@@ -50,16 +35,23 @@ public class HomeController {
     public String index(Model model) {
         model.addAttribute("config", config);
         Date date = new Date();
-        model.addAttribute("one", HazeDateUtils.format(date, "M月d日"));
-        model.addAttribute("two", HazeDateUtils.format(HazeDateUtils.addDays(date, 1), "M月d日"));
-        model.addAttribute("three", HazeDateUtils.format(HazeDateUtils.addDays(date, 2), "M月d日"));
+        //计算当天晚上20点时间
+        Date startTime = HazeDateUtils.setHours(date, 20);
+        Date endTime = HazeDateUtils.addHours(startTime, 23);
+        model.addAttribute("one", HazeDateUtils.format(startTime, "M月d日 HH时") + "--" + HazeDateUtils.format(endTime, "M月d日 HH时"));
+        startTime = HazeDateUtils.addDays(startTime, 1);
+        endTime = HazeDateUtils.addHours(startTime, 23);
+        model.addAttribute("two", HazeDateUtils.format(startTime, "M月d日 HH时") + "--" + HazeDateUtils.format(endTime, "M月d日 HH时"));
+        startTime = HazeDateUtils.addDays(startTime, 1);
+        endTime = HazeDateUtils.addHours(startTime, 23);
+        model.addAttribute("three", HazeDateUtils.format(startTime, "M月d日 HH时") + "-" + HazeDateUtils.format(endTime, "M月d日 HH时"));
         model.addAttribute("type", "INDEX");
         return "index";
     }
 
 
     @RequestMapping(value = "/show/{type}")
-    public String seaWind(Model model, @PathVariable String type) {
+    public String showFactor(Model model, @PathVariable String type) {
         //计算当天日期 然后算出近一个月内数据
         Map<String, List<Date>> map = new LinkedHashMap<>();
         int totalDay = 20;
@@ -85,59 +77,14 @@ public class HomeController {
         }
     }
 
-    private List<GisDataWrapper> getRemoteData(Factor factor, String region) throws Exception {
-        ObjectMapper mapper = new ObjectMapper();
-        String s = getData(factor, region);
-        return mapper.readValue(s, new TypeReference<List<GisDataWrapper>>() {
-        });
+    @RequestMapping(value = "/getRegions")
+    @ResponseBody
+    public List<Region> getRegions() {
+        return ConfigLoader.REGIONS;
     }
-
-
-    private String getData(Factor factor, String region) throws Exception {
-        CloseableHttpClient httpclient = HttpClients.createDefault();
-        try {
-            String url = config.getRemoteUrl();
-            url += "?" + config.getDataMethod();
-            url += "&factor=" + factor.name();
-            //url += "&date=2016-12-01";
-            url += "&date=" + HazeDateUtils.format(new Date(), "yyyy-MM-dd");
-            if (StringUtils.isNoneBlank(region)) {
-                url += "&region=" + region;
-            }
-            HttpGet httpget = new HttpGet(url);
-            for (Header header : httpget.getAllHeaders()) {
-                System.out.println(header.getName() + "," + header.getValue());
-            }
-            LOGGER.debug("Request URL= " + httpget.getRequestLine());
-            ResponseHandler<String> responseHandler = new ResponseHandler<String>() {
-                @Override
-                public String handleResponse(
-                        final HttpResponse response) throws IOException {
-                    int status = response.getStatusLine().getStatusCode();
-                    if (status >= 200 && status < 300) {
-                        HttpEntity entity = response.getEntity();
-                        return entity != null ? EntityUtils.toString(entity) : null;
-                    } else {
-                        throw new ClientProtocolException("Unexpected response status: " + status);
-                    }
-                }
-            };
-            String result = httpclient.execute(httpget, responseHandler);
-            LOGGER.debug("Response=" + result);
-            return result;
-        } finally {
-            try {
-                httpclient.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-
-    }
-
 
     private List<StatResult> getWAVData(String region) throws Exception {
-        List<GisDataWrapper> list = getRemoteData(Factor.WAV, region);
+        List<GisDataWrapper> list = GisDataUtils.getFactorData(config,Factor.WAV, region,new Date());
         //处理海浪数据
         GisDataWrapper gisDataWrapper = list.get(0);
         //获取数据
@@ -180,7 +127,7 @@ public class HomeController {
      * @throws IOException
      */
     private List<StatResult> getSSWData(String region) throws Exception {
-        List<GisDataWrapper> list = getRemoteData(Factor.SSW, region);
+        List<GisDataWrapper> list = GisDataUtils.getFactorData(config,Factor.SSW, region,new Date());
         //处理海风数据
         GisDataWrapper gisDataWrapper = list.get(0);
         //获取数据

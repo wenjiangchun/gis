@@ -142,8 +142,7 @@ public class HomeController {
     public List<StatData> getRegionData(String regionCode, Factor factor) throws Exception {
         //获取远程数据信息
         List<GisDataWrapper> gisDataWrapperList = GisDataUtils.getFactorData(configLoader, factor, regionCode, new Date());
-        List<StatData> dataList = GisDataUtils.getFactorData(factor, gisDataWrapperList);
-        return dataList;
+        return GisDataUtils.getFactorData(factor, gisDataWrapperList);
     }
 
     /**
@@ -227,11 +226,18 @@ public class HomeController {
         return result;
     }
 
+    /**
+     * 获取区域当前点所有要素数据
+     * @param regionCode
+     * @return
+     * @throws Exception
+     */
     @RequestMapping("/getRegionCurrentData")
     @ResponseBody
     public List<String> getRegionCurrentData(String regionCode) throws Exception {
         //ji算当前时间点
         Date date = new Date();
+        //TODO 等到正式上线需要删除此处
         regionCode = null;
         int hour = Integer.parseInt(String.valueOf(HazeDateUtils.getFragmentInHours(date, Calendar.HOUR_OF_DAY)));
         int statHour = hour;
@@ -240,7 +246,6 @@ public class HomeController {
             date = HazeDateUtils.addDays(date, -1);
             statHour = (24 - 20) + hour;
         }
-        String dateFormat = HazeDateUtils.format(date, "yyyy-MM-dd");
         List<String> result = new ArrayList<>();
         for (Factor factor : Factor.values()) {
             List<GisDataWrapper> gisDataWrapperList = GisDataUtils.getFactorData(configLoader, factor, regionCode, date);

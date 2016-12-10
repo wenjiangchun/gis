@@ -23,7 +23,7 @@ body{background:#3d5267;min-width:1024px;}
 .column_name{float:left;margin-left:24px;}
 .column_more{float:right;margin-right:24px;}
 .report_menu{background:#fff;height:34px;}
-.report_menu span{float:left;width:250px;background:#d7f0ff;border:1px solid #b9e5ff;line-height:34px;text-align:center;color:#0885d3;font-size:14px;border-bottom:1px solid #066195;cursor:pointer;}
+.report_menu span{float:left;width:254px;background:#d7f0ff;border:1px solid #b9e5ff;line-height:34px;text-align:center;color:#0885d3;font-size:14px;border-bottom:1px solid #066195;cursor:pointer;}
 .report_menu .report_cur{background:#fff;border:1px solid #066195;border-bottom:1px solid #fff;}
 .report_img{width:100%;height:460px;backgroungd:#fff;overflow:hidden;background:#fff;}
 .report_img img{margin:0 auto;}

@@ -19,7 +19,7 @@
 	</div>
 	<div class="container_right">
         <div class="hours_box">
-            <input class="animate_btn" value="动图" type="button" onclick="showDynamicImg()">
+            <input class="animate_btn"  style="font-weight: bold" value="动图" type="button" onclick="showDynamicImg()">
             <div class="hours">
             </div>
             <div class="clearfix"></div>
@@ -74,6 +74,7 @@
             });
             $(this).addClass("date_cur");
             getData($(this).attr("value"));
+            $(".animate_btn").attr("value", "动图");
         });
         //点击第一个
         $("span[class=biaodan]").eq(0).click();
@@ -128,10 +129,17 @@
                 var i = 0;
                 clearIntervalId = setInterval(function() {
                     getPicture(i);
+                    $(".hours").find("span").removeClass("hours_cur");
+                    $(".hours").find("span").each(function(index, ele) {
+                        if (i == $(this).attr("hour")) {
+                            $(this).addClass("hours_cur");
+						}
+					});
                     i ++;
                     if(i > 72) {
                         i = 0;
                     }
+
                 }, 2000)
             }
         }

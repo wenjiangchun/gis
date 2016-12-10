@@ -150,10 +150,19 @@ nav > div > ul > a > li:checked {
     float: left;
 }
 
-.A > div {
+.start {
     width: 66px;
     height: 28px;
     background: url(../images/button_y.gif);
+    margin-top: 22px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.stop {
+    width: 66px;
+    height: 28px;
+    background: url(../images/button_n.gif);
     margin-top: 22px;
     margin-left: auto;
     margin-right: auto;
@@ -189,7 +198,7 @@ nav > div > ul > a > li:checked {
 
 .map2 {
     width: 940px;
-    height: 400px;
+    height: 500px;
     margin: 0 auto;
     background: #B06E6F;
 }
@@ -216,4 +225,13 @@ nav > div > ul > a > li:checked {
     border: #52b0ff solid 1px;
     text-align: center;
 }
+
+
+.hours_box{background:#91a4ae;height:60px;}
+.hours_box .animate_btn{float:left;text-align:center;background:#ffb83d;color:#fff;width:64px;line-height:26px;border-radius:6px;border:none;margin:16px 7px 0 7px;}
+.hours_box .hours{width:680px;float:left;margin-top:8px;}
+.hours_box .animate_btn:hover{background:#fdab1e;cursor:pointer;}
+.hours span{float:left;width:40px;margin:1px 2px;padding:0 4px;line-height:20px;cursor:pointer;color:#fff;}
+.hours span:hover{background:#3b454b;}
+.hours .hours_cur{background:#3b454b;}
 

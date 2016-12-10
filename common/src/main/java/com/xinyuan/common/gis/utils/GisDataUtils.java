@@ -8,6 +8,7 @@ import com.xinyuan.common.gis.StatResult;
 import com.xinyuan.common.gis.WindLevel;
 import com.xinyuan.common.gis.config.ConfigLoader;
 import com.xinyuan.common.utils.HazeDateUtils;
+import com.xinyuan.common.utils.HazeHttpUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.Header;
 import org.apache.http.HttpEntity;
@@ -34,9 +35,10 @@ public final class GisDataUtils {
 
     /**
      * 获取统计列表中某个属性最大值,最小值和平均值
+     *
      * @param gisDataList 待统计的数据列表
-     * @param property 数据列表中需要统计的字段
-     * @param factor 统计对应要素 如海浪 海风等
+     * @param property    数据列表中需要统计的字段
+     * @param factor      统计对应要素 如海浪 海风等
      * @return 返回列表中字段最大 最小和平均值
      */
     public static StatResult getStatResult(List<Map<String, Object>> gisDataList, String property, Factor factor) {
@@ -64,11 +66,12 @@ public final class GisDataUtils {
 
     /**
      * 获取统计列表中某个属性最大值,最小值和平均值
+     *
      * @param gisDataList 待统计的数据列表
-     * @param factor 统计对应要素 如海浪 海风等
+     * @param factor      统计对应要素 如海浪 海风等
      * @return 返回列表中字段最大 最小和平均值
      */
-    public static StatResult getWindStatResult(List<Map<String, Object>> gisDataList,  Factor factor) {
+    public static StatResult getWindStatResult(List<Map<String, Object>> gisDataList, Factor factor) {
         //存放风速值
         List<BigDecimal> rapidList = new ArrayList<>(gisDataList.size());
         for (Map<String, Object> gisData : gisDataList) {
@@ -105,7 +108,7 @@ public final class GisDataUtils {
             v10 = Double.valueOf(gisDataMax.get("v10").toString());
         }
         //计算风向
-        double value = (Math.atan2(v10, u10)/Math.PI) * 180;
+        double value = (Math.atan2(v10, u10) / Math.PI) * 180;
         result.getResult().put("directionMax", new BigDecimal(value).setScale(2, BigDecimal.ROUND_HALF_UP));
         result.setFactor(factor);
         return result;
@@ -125,7 +128,7 @@ public final class GisDataUtils {
                             waveHeightList.add(formatData(gisData.get("waveHeight").toString()));
                             //waveDirectionList.add(gisData.get("waveDirection").toString());
                         }
-                        dataList.add(new StatData("波高","波高(m)",waveHeightList));
+                        dataList.add(new StatData("波高", "波高(m)", waveHeightList));
                         //dataList.add(new StatData("波向","波向",waveDirectionList));
                         break;
                     case CUR:
@@ -148,8 +151,8 @@ public final class GisDataUtils {
                             curHeightList.add(String.valueOf(waterSurfaceHeight));
                             curRapidList.add(String.valueOf(rapid));
                         }
-                        dataList.add(new StatData("海流速度","海流速度(m/s)",curRapidList));
-                        dataList.add(new StatData("海面高度","海面高度(m)",curHeightList));
+                        dataList.add(new StatData("海流速度", "海流速度(m/s)", curRapidList));
+                        dataList.add(new StatData("海面高度", "海面高度(m)", curHeightList));
                         break;
                     case ICE:
                         //处理海冰 获取海冰厚度
@@ -157,7 +160,8 @@ public final class GisDataUtils {
                         for (Map<String, Object> gisData : gisDataWrapper.getDatas()) {
                             iceThickList.add(formatData(gisData.get("iceThick").toString()));
                         }
-                        dataList.add(new StatData("海冰厚度","海冰厚度(m)",iceThickList));break;
+                        dataList.add(new StatData("海冰厚度", "海冰厚度(m)", iceThickList));
+                        break;
                     case SSW:
                         //处理海风 获取风速风级
                         List<String> rapidList = new ArrayList<>(gisDataWrapper.getDatas().size());
@@ -177,7 +181,7 @@ public final class GisDataUtils {
                             levelList.add(String.valueOf(WindLevel.getLevel(rapid).level));
                             rapidList.add(String.valueOf(rapid));
                         }
-                        dataList.add(new StatData("风速","风速(m/s)",rapidList));
+                        dataList.add(new StatData("风速", "风速(m/s)", rapidList));
                         //dataList.add(new StatData("风级","风级",levelList));
                 }
             }
@@ -191,16 +195,21 @@ public final class GisDataUtils {
     }
 
 
+    /**
+     * GIS缓存数据 主要用来存储每天各区域下各元素预报数据 默认存放近7天数据
+     */
     public static final Map<String, Object> DATA_CACHE = new ConcurrentHashMap<>();
+
 
     private static final Logger LOGGER = LoggerFactory.getLogger(GisDataUtils.class);
 
     /**
      * 获取指定区域下面的要素数据信息
+     *
      * @param configLoader 配置类
-     * @param factor 要素
-     * @param region 区域代码
-     * @param date  数据日期
+     * @param factor       要素
+     * @param region       区域代码
+     * @param date         数据日期
      * @return
      * @throws Exception
      */
@@ -213,10 +222,11 @@ public final class GisDataUtils {
 
     /**
      * 获取指定区域下面的要素图片信息
+     *
      * @param configLoader 配置类
-     * @param factor 要素
-     * @param region 区域代码
-     * @param date  数据日期
+     * @param factor       要素
+     * @param region       区域代码
+     * @param date         数据日期
      * @return
      * @throws Exception
      */
@@ -229,6 +239,7 @@ public final class GisDataUtils {
 
     private static synchronized String getRemoteData(Factor factor, String region, String remoteUrl, String methodName, Date date) throws Exception {
         //首先从缓存中加载 缓存Key=要素,日期,区域代码(如果有) 如WAV,2016-12-07,getData/getPicture,LNDLYC
+        date = HazeDateUtils.addDays(date, -3);
         String cacheKey = factor + "," + HazeDateUtils.format(date, "yyyy-MM-dd") + "," + methodName;
         if (region != null) {
             cacheKey += "," + region;
@@ -238,53 +249,27 @@ public final class GisDataUtils {
             LOGGER.debug("命中缓存,从缓存中加载数据key=【{}】, value=【{}】", cacheKey, result);
             return result;
         }
-        CloseableHttpClient httpclient = HttpClients.createDefault();
-        try {
-            String url = remoteUrl;
-            url += "?" + methodName;
-            url += "&factor=" + factor.name();
-            if (date != null) {
-                url += "&date=" + HazeDateUtils.format(date, "yyyy-MM-dd");
-            }
-            if (StringUtils.isNoneBlank(region)) {
-                url += "&region=" + region;
-            }
-            HttpGet httpget = new HttpGet(url);
-            for (Header header : httpget.getAllHeaders()) {
-                System.out.println(header.getName() + "," + header.getValue());
-            }
-            LOGGER.debug("Request URL= " + httpget.getRequestLine());
-            ResponseHandler<String> responseHandler = new ResponseHandler<String>() {
-                @Override
-                public String handleResponse(
-                        final HttpResponse response) throws IOException {
-                    int status = response.getStatusLine().getStatusCode();
-                    if (status >= 200 && status < 300) {
-                        HttpEntity entity = response.getEntity();
-                        return entity != null ? EntityUtils.toString(entity) : null;
-                    } else {
-                        throw new ClientProtocolException("Unexpected response status: " + status);
-                    }
-                }
-            };
-            String result = httpclient.execute(httpget, responseHandler);
-            LOGGER.debug("Response=" + result);
-            GisDataUtils.DATA_CACHE.put(cacheKey, result);
-            return result;
-        } finally {
-            try {
-                httpclient.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+        String url = remoteUrl;
+        url += "?" + methodName;
+        url += "&factor=" + factor.name();
+        if (date != null) {
+          url += "&date=" + HazeDateUtils.format(date, "yyyy-MM-dd");
         }
-
+        if (StringUtils.isNoneBlank(region)) {
+            //TODO 上线后删除此处
+            //url += "&region=" + region;
+        }
+        LOGGER.debug("Request URL= " + url);
+        String result = HazeHttpUtils.getString(url);
+        LOGGER.debug("Response=" + result);
+        GisDataUtils.DATA_CACHE.put(cacheKey, result);
+        return result;
     }
 
     /**
      * 清空所有数据缓存
      */
-    public static void clearAllCache() {
+    public synchronized static void clearAllCache() {
         LOGGER.debug("清空全部缓存数据...");
         DATA_CACHE.clear();
         LOGGER.debug("缓存数据清空完毕");
