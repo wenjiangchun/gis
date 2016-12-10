@@ -198,13 +198,13 @@ nav > div > ul > a > li:checked {
 
 .map2 {
     width: 940px;
-    height: 500px;
+    height: 400px;
     margin: 0 auto;
     background: #B06E6F;
 }
 
 .under {
-    height: 400px;
+    height: 200px;
     margin: 10px auto;
     width: 940px;
 }

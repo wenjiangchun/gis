@@ -1,6 +1,6 @@
 <%@ page language="java" pageEncoding="UTF-8" %>
 <div class="footer">
-        <div class="footer-inner">
+       <%-- <div class="footer-inner">
                 <!-- #section:basics/footer -->
                 <div class="footer-content">
 						<span class="bigger-120">
@@ -24,5 +24,5 @@
 						</span>
                 </div>
                 <!-- /section:basics/footer -->
-        </div>
+        </div>--%>
 </div>
