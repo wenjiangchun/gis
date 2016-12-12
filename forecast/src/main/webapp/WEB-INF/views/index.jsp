@@ -56,7 +56,7 @@
     var clearIntervalId = null;
 
     function getPicture(factor) {
-        $.get("${ctx}/getRegionPicture", {factor: factor}, function(data) {
+        $.get("${ctx}/getRegionPicture", {factor: factor,regionCode:"LNS"}, function(data) {
             if (clearIntervalId != null) {
                 clearInterval(clearIntervalId);
             }
