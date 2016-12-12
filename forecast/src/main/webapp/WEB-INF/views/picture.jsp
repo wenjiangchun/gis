@@ -11,8 +11,8 @@
 	<div class="container_left">
 			<c:forEach items="${days}" var="day">
 				<h3 class="date_title">${day.key}年</h3>
-				<c:forEach items="${day.value}" var="d">
-					<span class="biaodan" value="<fmt:formatDate value="${d}" pattern="yyyy-MM-dd"/>"><fmt:formatDate value="${d}" pattern="MM月dd日"/></span>
+				<c:forEach items="${day.value}" var="d" varStatus="index">
+						<span class="biaodan" value="<fmt:formatDate value="${d}" pattern="yyyy-MM-dd"/>"><fmt:formatDate value="${d}" pattern="MM月dd日"/></span>
 				</c:forEach>
 			</c:forEach>
 		    <p class="date_more hide" id="more" onclick="showMore()">更多日期</p>

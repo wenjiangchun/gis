@@ -63,14 +63,14 @@
             if (data.picture.length == 0) {
                 $(".report_img").find("img").attr("src", "${ctx}/resources/style/images/nodata.jpg").css({width:534, height:189});
             } else {
-                $(".report_img").find("img").attr("src", data.picture[0]).css({width:800, height:400});
+                $(".report_img").find("img").attr("src", data.picture[0]).css({width:512, height:512});
                 var i = 0;
                 clearIntervalId = setInterval(function() {
                     i ++;
                     if(i >= data.picture.length) {
                         i = 0;
                     }
-                    $(".report_img").find("img").attr("src", data.picture[i]).css({width:800, height:400});
+                    $(".report_img").find("img").attr("src", data.picture[i]).css({width:512, height:512});
                 }, 2000)
             }
         });
