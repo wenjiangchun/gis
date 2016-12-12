@@ -239,7 +239,8 @@ public final class GisDataUtils {
 
     private static synchronized String getRemoteData(Factor factor, String region, String remoteUrl, String methodName, Date date) throws Exception {
         //首先从缓存中加载 缓存Key=要素,日期,区域代码(如果有) 如WAV,2016-12-07,getData/getPicture,LNDLYC
-        date = HazeDateUtils.addDays(date, -3);
+        //date = HazeDateUtils.addDays(date, -3);
+        date = HazeDateUtils.parseDate("2016-12-10", "yyyy-MM-dd");
         String cacheKey = factor + "," + HazeDateUtils.format(date, "yyyy-MM-dd") + "," + methodName;
         if (region != null) {
             cacheKey += "," + region;

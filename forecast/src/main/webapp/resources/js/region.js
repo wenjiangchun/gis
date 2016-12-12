@@ -105,6 +105,7 @@ function showK(rawData) {
                     type: ['line', 'bar']
                 }
             },
+            right:30
         },
         grid: [
             {

@@ -63,7 +63,7 @@
             if (data.picture.length == 0) {
                 $(".report_img").find("img").attr("src", "${ctx}/resources/style/images/nodata.jpg").css({width:534, height:189});
             } else {
-                $(".report_img").find("img").attr("src", data.picture[0]).css({width:800, height:500});
+                $(".report_img").find("img").attr("src", data.picture[0]).css({width:800, height:400});
                 var i = 0;
                 clearIntervalId = setInterval(function() {
                     i ++;
