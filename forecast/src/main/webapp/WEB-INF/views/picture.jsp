@@ -39,7 +39,7 @@
 	var method = "${config.pictureMethod}";
     var pictures = [];
 	function getData(date) {
-	    $.get(remoteUrl + "?" + method + "&date=" + date + "&factor=" + type + "&region=LNS", function(data) {
+	    $.get(remoteUrl + "?" + method + "&date=" + date + "&factor=" + type + "&region=${config.provinceCode}", function(data) {
             if (clearIntervalId != null) {
                 clearInterval(clearIntervalId);
                 clearIntervalId = null;

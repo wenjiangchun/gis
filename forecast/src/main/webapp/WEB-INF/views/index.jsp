@@ -56,7 +56,7 @@
     var clearIntervalId = null;
 
     function getPicture(factor) {
-        $.get("${ctx}/getRegionPicture", {factor: factor,regionCode:"LNS"}, function(data) {
+        $.get("${ctx}/getRegionPicture", {factor: factor,regionCode:"${config.provinceCode}"}, function(data) {
             if (clearIntervalId != null) {
                 clearInterval(clearIntervalId);
             }
@@ -70,7 +70,7 @@
                     if(i >= data.picture.length) {
                         i = 0;
                     }
-                    $(".report_img").find("img").attr("src", data.picture[i]).css({width:800, height:500});
+                    $(".report_img").find("img").attr("src", data.picture[i]).css({width:800, height:400});
                 }, 2000)
             }
         });

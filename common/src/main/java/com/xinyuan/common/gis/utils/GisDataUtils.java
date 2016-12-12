@@ -177,7 +177,8 @@ public final class GisDataUtils {
                                 u10 = Double.valueOf(gisData.get("v10").toString());
                             }
                             //计算风速
-                            double rapid = new BigDecimal(Math.sqrt(u10 * u10 + v10 * v10)).setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
+                            //double rapid = new BigDecimal(Math.sqrt(u10 * u10 + v10 * v10)).setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
+                            double rapid = new BigDecimal(gisData.get("fengsu").toString()).setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
                             levelList.add(String.valueOf(WindLevel.getLevel(rapid).level));
                             rapidList.add(String.valueOf(rapid));
                         }
@@ -240,7 +241,7 @@ public final class GisDataUtils {
     private static synchronized String getRemoteData(Factor factor, String region, String remoteUrl, String methodName, Date date) throws Exception {
         //首先从缓存中加载 缓存Key=要素,日期,区域代码(如果有) 如WAV,2016-12-07,getData/getPicture,LNDLYC
         //date = HazeDateUtils.addDays(date, -3);
-        date = HazeDateUtils.parseDate("2016-12-07", "yyyy-MM-dd");
+        date = HazeDateUtils.parseDate("2016-12-12", "yyyy-MM-dd");
         String cacheKey = factor + "," + HazeDateUtils.format(date, "yyyy-MM-dd") + "," + methodName;
         if (region != null) {
             cacheKey += "," + region;

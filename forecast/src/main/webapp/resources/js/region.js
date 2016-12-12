@@ -19,6 +19,7 @@ $(function() {
         function(){
             $(".focus_left span").removeClass()
             $(this).addClass("focusLeft_cur")
+            getRegionData();
         }
     );
 });
@@ -169,7 +170,7 @@ function showK(rawData) {
                 type: 'inside',
                 xAxisIndex: [0, 1],
                 start: 0,
-                end: 2
+                end: 33
             },
             {
                 show: true,
@@ -177,7 +178,7 @@ function showK(rawData) {
                 type: 'slider',
                 top: '85%',
                 start: 0,
-                end: 2
+                end: 33
             }
         ],
         series: [

@@ -24,9 +24,9 @@
     </div>
     <div class="focus_right">
         <div class="focus_title">
-            <span class="focusTitle_cur" name="picture"><i class="fa fa-picture-o" aria-hidden="true"></i>
+            <span class="focusTitle_cur" name="picture" style="display: none"><i class="fa fa-picture-o" aria-hidden="true"></i>
 场图</span>
-            <span name="table"><i class="fa fa-line-chart" aria-hidden="true"></i>
+            <span class="focusTitle_cur" name="table"><i class="fa fa-line-chart" aria-hidden="true"></i>
 数值</span>
         </div>
         <div class="focus_img" style="height: 530px">
@@ -162,7 +162,8 @@
         $(".focus_left").find("span").removeClass("focusLeft_cur");
         $(".focus_left").find("span").eq(0).addClass("focusLeft_cur");
         clear();
-        getRegionPicture(factor, regionCode);
+        //getRegionPicture(factor, regionCode);
+        getRegionData();
     }
 
 </script>

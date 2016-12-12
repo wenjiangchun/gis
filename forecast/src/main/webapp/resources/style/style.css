@@ -54,7 +54,7 @@ body{background:#3d5267;min-width:1024px;}
 .focus_left{float:left;margin:10px 0 0 20px;border:1px solid #b2b2b2;width:264px;height:520px;background:#fff;}
 .focus_left .focusLeft_cur{background:#059df5;border-top:1px solid #fff;border-bottom:1px solid #1283c5;color:#fff;}
 .focus_right{float:right;margin:10px 20px 0 0;width:698px;background:#fff;}
-.focus_title {width:200px;height:28px;border:1px solid #305981;border-radius:4px;}
+.focus_title {width:100px;height:28px;border:1px solid #305981;border-radius:4px;}
 .focus_title span{width:100px;float:left;text-align:center;line-height:28px;color:#3d5872;font-size:14px;cursor:pointer;border-radius:2px;}
 .focus_title .focusTitle_cur{background:#336aa0;color:#fff;}
 .focus_img{width:696px;border:1px solid #b2b2b2;height:400px;margin-top:14px;}

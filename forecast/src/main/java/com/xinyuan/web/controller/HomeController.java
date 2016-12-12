@@ -238,7 +238,7 @@ public class HomeController {
         //ji算当前时间点
         Date date = new Date();
         //TODO 等到正式上线需要删除此处
-        regionCode = null;
+        //regionCode = null;
         int hour = Integer.parseInt(String.valueOf(HazeDateUtils.getFragmentInHours(date, Calendar.HOUR_OF_DAY)));
         int statHour = hour;
         if (hour < 20) {
