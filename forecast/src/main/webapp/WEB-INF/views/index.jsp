@@ -56,21 +56,21 @@
     var clearIntervalId = null;
 
     function getPicture(factor) {
-        $.get("${ctx}/getRegionPicture", {factor: factor}, function(data) {
+        $.get("${ctx}/getRegionPicture", {factor: factor,regionCode:"${config.provinceCode}"}, function(data) {
             if (clearIntervalId != null) {
                 clearInterval(clearIntervalId);
             }
             if (data.picture.length == 0) {
                 $(".report_img").find("img").attr("src", "${ctx}/resources/style/images/nodata.jpg").css({width:534, height:189});
             } else {
-                $(".report_img").find("img").attr("src", data.picture[0]).css({width:800, height:500});
+                $(".report_img").find("img").attr("src", data.picture[0]).css({width:512, height:512});
                 var i = 0;
                 clearIntervalId = setInterval(function() {
                     i ++;
                     if(i >= data.picture.length) {
                         i = 0;
                     }
-                    $(".report_img").find("img").attr("src", data.picture[i]).css({width:800, height:500});
+                    $(".report_img").find("img").attr("src", data.picture[i]).css({width:512, height:512});
                 }, 2000)
             }
         });

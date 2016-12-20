@@ -1,13 +1,12 @@
 <%@ page language="java" pageEncoding="UTF-8" %>
 <div class="footer">
-        <div class="footer-inner">
+        <%--<div class="footer-inner">
                 <!-- #section:basics/footer -->
                 <div class="footer-content">
 						<span class="bigger-120">
 							<span class="blue bolder">Haze</span>
 							Application &copy; 2013-2014
 						</span>
-
                         &nbsp; &nbsp;
 						<span class="action-buttons">
 							<a href="#">
@@ -24,5 +23,5 @@
 						</span>
                 </div>
                 <!-- /section:basics/footer -->
-        </div>
+        </div>--%>
 </div>

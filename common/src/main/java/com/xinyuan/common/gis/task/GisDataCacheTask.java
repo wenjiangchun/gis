@@ -19,8 +19,8 @@ public class GisDataCacheTask {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(GisDataCacheTask.class);
 
-    @Scheduled(cron = "0 0/1 * * * ?")
-    public void clearCache() {
+    @Scheduled(cron = "0 0/5 * * * ?")
+    public synchronized void clearCache() {
         String preWeekDay = HazeDateUtils.format(HazeDateUtils.addDays(new Date(), -7), "yyyy-MM-dd");
         //获取一周前的时间点
         LOGGER.debug("定时任务执行,开始清理过期缓存数据,指定日期【{}】", preWeekDay);

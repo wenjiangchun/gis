@@ -11,15 +11,15 @@
 	<div class="container_left">
 			<c:forEach items="${days}" var="day">
 				<h3 class="date_title">${day.key}年</h3>
-				<c:forEach items="${day.value}" var="d">
-					<span class="biaodan" value="<fmt:formatDate value="${d}" pattern="yyyy-MM-dd"/>"><fmt:formatDate value="${d}" pattern="MM月dd日"/></span>
+				<c:forEach items="${day.value}" var="d" varStatus="index">
+						<span class="biaodan" value="<fmt:formatDate value="${d}" pattern="yyyy-MM-dd"/>"><fmt:formatDate value="${d}" pattern="MM月dd日"/></span>
 				</c:forEach>
 			</c:forEach>
 		    <p class="date_more hide" id="more" onclick="showMore()">更多日期</p>
 	</div>
 	<div class="container_right">
         <div class="hours_box">
-            <input class="animate_btn" value="动图" type="button" onclick="showDynamicImg()">
+            <input class="animate_btn"  style="font-weight: bold" value="动图" type="button" onclick="showDynamicImg()">
             <div class="hours">
             </div>
             <div class="clearfix"></div>
@@ -39,7 +39,7 @@
 	var method = "${config.pictureMethod}";
     var pictures = [];
 	function getData(date) {
-	    $.get(remoteUrl + "?" + method + "&date=" + date + "&factor=" + type, function(data) {
+	    $.get(remoteUrl + "?" + method + "&date=" + date + "&factor=" + type + "&region=${config.provinceCode}", function(data) {
             if (clearIntervalId != null) {
                 clearInterval(clearIntervalId);
                 clearIntervalId = null;
@@ -74,6 +74,7 @@
             });
             $(this).addClass("date_cur");
             getData($(this).attr("value"));
+            $(".animate_btn").attr("value", "动图");
         });
         //点击第一个
         $("span[class=biaodan]").eq(0).click();
@@ -128,10 +129,17 @@
                 var i = 0;
                 clearIntervalId = setInterval(function() {
                     getPicture(i);
+                    $(".hours").find("span").removeClass("hours_cur");
+                    $(".hours").find("span").each(function(index, ele) {
+                        if (i == $(this).attr("hour")) {
+                            $(this).addClass("hours_cur");
+						}
+					});
                     i ++;
                     if(i > 72) {
                         i = 0;
                     }
+
                 }, 2000)
             }
         }

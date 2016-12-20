@@ -13,6 +13,10 @@
 	<link rel="stylesheet" href="${ctx}/resources/font-awesome/css/font-awesome.css" />
 	<script type="text/javascript" src="${ctx}/resources/jquery/jquery.min.js"></script>
 	<script type="text/javascript" src="${ctx}/resources/echarts/echarts.min.js"></script>
+	<script type="text/javascript" src="${ctx}/resources/layer/layer.js"></script>
+	<script type="text/javascript">
+		var ctx = "${ctx}";
+	</script>
 	<sitemesh:write property='head' />
 </head>
 

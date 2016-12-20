@@ -5,15 +5,15 @@ package com.xinyuan.common.gis;
  */
 public enum Factor {
 
+
+    SSW("海风"),
     WAV("海浪"),
 
     //TID("潮汐"),
 
     CUR("海流"),
 
-    ICE("海冰"),
-
-    SSW("海风");
+    ICE("海冰");
 
     public final String title;
 

@@ -43,6 +43,9 @@ public class ConfigLoader {
     @Value("${bmap.url}")
     private String bMapUrl;
 
+    @Value("${region.province.code}")
+    private String provinceCode;
+
     public String getbMapUrl() {
         return bMapUrl;
     }
@@ -73,6 +76,14 @@ public class ConfigLoader {
 
     public void setDataMethod(String dataMethod) {
         this.dataMethod = dataMethod;
+    }
+
+    public String getProvinceCode() {
+        return provinceCode;
+    }
+
+    public void setProvinceCode(String provinceCode) {
+        this.provinceCode = provinceCode;
     }
 
     public static final List<Region> REGIONS;
