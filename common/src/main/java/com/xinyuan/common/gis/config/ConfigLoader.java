@@ -99,7 +99,7 @@ public class ConfigLoader {
             while ((len = in.read(buffer)) != -1) {
                 out.write(buffer, 0, len);
             }
-            String json = new String(out.toByteArray());
+            String json = new String(out.toByteArray(), "UTF-8");
             ObjectMapper mapper = new ObjectMapper();
             REGIONS =  mapper.readValue(json, new TypeReference<List<Region>>() {});
             LOGGER.debug("加载区域设置信息完毕,共【{}】条数据", REGIONS.size());
