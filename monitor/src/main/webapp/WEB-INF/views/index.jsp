@@ -78,9 +78,13 @@
         var yugang = document.createElement("input");
         yunchang.value = "渔场";
         yunchang.style.border = "1px";
+        yunchang.style.padding = "3px";
+        yunchang.style.fontSize = "12px";
         yunchang.style.cursor = "pointer";
         yunchang.type = "button";
         yugang.value = "渔港";
+        yugang.style.padding = "3px";
+        yugang.style.fontSize = "12px";
         yugang.style.border = "1px";
         yugang.style.cursor = "pointer";
         yugang.type = "button";
@@ -138,7 +142,7 @@
             }
             var label = new BMap.Label(dataPloygon[i].name, {position: polygon.getBounds().getCenter()});
             label.setStyle({
-                fontSize: "14px",
+                fontSize: "12px",
                 color: "#FAF1D2",
                 fontWeight:"bold",
                 borderColor: "transparent",
@@ -151,9 +155,13 @@
             polygon.addEventListener("click", function (type, target, point, pixel) {
                 getDate(this.code, this.name);
             });
+            label.addEventListener("click", function (type, target, point, pixel) {
+                getDate(this.polygon.code, this.polygon.name);
+            });
             polygon.label = label;
-            map.addOverlay(polygon);
+            label.polygon = polygon;
             map.addOverlay(label);
+            map.addOverlay(polygon);
             if (i == 0) {
                 getDate(polygon.code, polygon.name);
                 polygon.setFillColor("#fff");
@@ -178,7 +186,7 @@
             var label = new BMap.Label(region.name, {position: new BMap.Point(point.x, point.y)});
             label.setStyle({
                 color: "#f86f06",
-                fontSize: "14px",
+                fontSize: "12px",
                 height: "20px",
                 lineHeight: "20px",
                 fontFamily: "微软雅黑",
