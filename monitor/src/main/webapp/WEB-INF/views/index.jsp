@@ -6,6 +6,13 @@
 <head>
     <title>渔业安全预警报系统</title>
     <script type="text/javascript" src="${config.bMapUrl}"></script>
+    <style type="text/css">
+        .B3{
+            width: 940px;
+            border: #52b0ff solid 1px;
+            top:100px;
+        }
+    </style>
 </head>
 <body>
 <div class="main">
@@ -33,17 +40,49 @@
                 <td class="td02">-/-</td>
                 <td class="td02">-/-</td>
             </tr>
-            <tr style="height: 20px;">
-                <td class="td02" style="background-color:#e8f4ff">潮高（米）</td>
-                <td class="td02">-/-</td>
-                <td class="td02">-/-</td>
-                <td class="td02">-/-</td>
+        </table>
+        <table class="B3" cellspacing="0" cellpadding="0" style="left: 10px" style="display:none">
+            <caption
+                    style="background: #47A6F6;color: #f1f1f1; font-size: 16px;font-weight: bold;padding: 10px; text-align:left"></caption>
+            <thead>
+            <tr style="height: 30px; font-weight: bold">
+                <td class="td02" style="background-color:#e8f4ff;" rowspan="2">日期</td>
+                <td class="td02" style="background-color:#e8f4ff" colspan="2">第一次高潮</td>
+                <td class="td02" style="background-color:#e8f4ff" colspan="2">第二次高潮
+                </td>
+                <td class="td02" style="background-color:#e8f4ff" colspan="2">第一次低潮</td>
+                <td class="td02" style="background-color:#e8f4ff" colspan="2">第二次低潮
+                </td>
             </tr>
+            <tr style="height: 30px; font-weight: bold">
+                <td class="td02" style="background-color:#e8f4ff">潮时</td>
+                <td class="td02" style="background-color:#e8f4ff">潮高(CM)
+                </td>
+                <td class="td02" style="background-color:#e8f4ff">潮时</td>
+                <td class="td02" style="background-color:#e8f4ff">潮高(CM)
+                </td>
+                <td class="td02" style="background-color:#e8f4ff">潮时</td>
+                <td class="td02" style="background-color:#e8f4ff">潮高(CM)
+                </td>
+                <td class="td02" style="background-color:#e8f4ff">潮时</td>
+                <td class="td02" style="background-color:#e8f4ff">潮高
+                </td>
+            </tr>
+            </thead>
+            <tbody>
+            <tr style="height: 30px; font-weight: bold">
+            </tr>
+            <tr style="height: 30px; font-weight: bold">
+            </tr>
+            <tr style="height: 30px; font-weight: bold">
+            </tr>
+            </tbody>
         </table>
     </div>
 </div>
 <script type="text/javascript">
     var dataPoint = [], dataPloygon = [];
+    var cityPoints = [];
     var map = new BMap.Map("map", {mapType: BMAP_HYBRID_MAP});
     map.addControl(new BMap.NavigationControl());
     map.addControl(new BMap.ScaleControl());
@@ -55,7 +94,12 @@
     $.getJSON("${ctx}/getRegions", function (data) {
         for (var i = 0; i < data.length; i++) {
             if (data[i].pointList.length == 1) {
-                dataPoint.push(data[i]);
+                if (data[i].level == 2) {
+                    cityPoints.push(data[i]);
+                } else {
+                    dataPoint.push(data[i]);
+                }
+
             } else {
                 dataPloygon.push(data[i]);
             }
@@ -76,6 +120,7 @@
         // 添加文字说明
         var yunchang = document.createElement("input");
         var yugang = document.createElement("input");
+        var city = document.createElement("input");
         yunchang.value = "渔场";
         yunchang.style.border = "1px";
         yunchang.style.padding = "3px";
@@ -92,8 +137,22 @@
         yunchang.style.color = "#fff";
         yugang.style.color = "#000";
         yugang.style.background = "#fff";
+
+
+        city.value = "城市";
+        city.style.padding = "3px";
+        city.style.fontSize = "12px";
+        city.style.border = "1px";
+        city.style.cursor = "pointer";
+        city.type = "button";
+        city.style.background = "#8ea8e0";
+        city.style.color = "#fff";
+        city.style.color = "#000";
+        city.style.background = "#fff";
+
         div.appendChild(yunchang);
         div.appendChild(yugang);
+        div.appendChild(city);
         // 设置样式
         div.style.cursor = "pointer";
         div.style.backgroundColor = "white";
@@ -102,6 +161,8 @@
             yunchang.style.color = "#fff";
             yugang.style.color = "#000";
             yugang.style.background = "#fff";
+            city.style.color = "#000"
+            city.style.background = "#fff";
             showPloygon();
         }
         yugang.onclick = function (e) {
@@ -109,7 +170,18 @@
             yunchang.style.color = "#000";
             yugang.style.color = "#fff"
             yugang.style.background = "#8ea8e0";
+            city.style.color = "#000"
+            city.style.background = "#fff";
             showPonit();
+        }
+        city.onclick = function (e) {
+            yunchang.style.background = "#fff";
+            yunchang.style.color = "#000";
+            yugang.style.color = "#000"
+            yugang.style.background = "#fff";
+            city.style.color = "#fff"
+            city.style.background = "#8ea8e0";
+            showCity();
         }
         map.getContainer().appendChild(div);
         //yunchang.click();
@@ -122,6 +194,8 @@
 
 
     function showPloygon() {
+        $(".B2").show();
+        $(".B3").hide();
         map.clearOverlays();
         var center = null;
         for (var i = 0; i < dataPloygon.length; i++) {
@@ -176,6 +250,8 @@
     }
 
     function showPonit() {
+        $(".B2").show();
+        $(".B3").hide();
         map.clearOverlays();
         var center = null;
         for (var i = 0; i < dataPoint.length; i++) {
@@ -245,7 +321,7 @@
                 }
             }
         }
-        $("caption").html(name);
+        $(".B2 caption").html(name);
         getRemoteData(region);
     }
 
@@ -282,6 +358,220 @@
                 }
             }
         });
+    }
+
+
+    /**
+     * 加载城市位置信息
+     */
+    var regionCode = "";
+    function showCity() {
+        $(".B3").show();
+        $(".B2").hide();
+        map.clearOverlays();
+        var data = cityPoints;
+            if (data != null && data.length > 0) {
+                var bdary = new BMap.Boundary();
+                for (var index = 0; index < data.length; index++) {
+                    var region = data[index];
+                    var name = region.name;
+                    if (regionCode == "") {
+                        if (index == 0) {
+                            regionCode = region.code;
+                        }
+                    }
+                    (function(index){ //闭包用法
+                        bdary.get(data[index].name, function(rs){
+                            var count = rs.boundaries.length; //行政区域的点有多少个
+                            if (count === 0) {
+                                alert('未能获取当前输入行政区域');
+                                return ;
+                            }
+                            var pointArray = [];
+                            for (var i = 0; i < count; i++) {
+                                var ply = new BMap.Polygon(rs.boundaries[i], {strokeWeight: 2, strokeColor: "#2f23ff"}); //建立多边形覆盖物
+                                var opts = {
+                                    position : ply.getBounds().getCenter(),    // 指定文本标注所在的地理位置
+                                    offset   : new BMap.Size(-10, -20)    //设置文本偏移量
+                                }
+                                var label = new BMap.Label(data[index].name, opts);  // 创建文本标注对象
+                                label.setStyle({
+                                    color: "#f86f06",
+                                    fontSize: "14px",
+                                    height: "20px",
+                                    lineHeight: "20px",
+                                    fontFamily: "微软雅黑",
+                                    fontWeight: "bold",
+                                    //borderStyle: "none",
+                                    borderColor: "#f8a01d",
+                                    //backgroundColor:"transparent"
+                                });
+                                //设置覆盖物关联label对象
+                                ply.label = label;
+                                ply.code = data[index].code;
+                                ply.name = data[index].name;
+                                //label.polygon = ply;
+                                map.addOverlay(ply);  //添加覆盖物
+                                map.addOverlay(label);
+                                pointArray = pointArray.concat(ply.getPath());
+                                //注册鼠标滑动事件
+                                ply.addEventListener("mousemove", function (type, target, point, pixel) {
+                                    //this.setStrokeColor("red");
+                                    //获取区域当前时间点数据
+                                    //registerInfoWindow(this);
+                                    //registerInfoWindow(this);
+                                });
+                                ply.addEventListener("mouseout", function (type, target, point, pixel) {
+                                    //this.setStrokeColor("#2f23ff");
+                                });
+                                ply.addEventListener("click", function (type, target, point, pixel) {
+                                  /*  //首先重置所有面
+                                    if (currentRegionOverlayer != null) {
+                                        currentRegionOverlayer.setFillColor("#fff");
+                                    }
+                                    currentRegionOverlayer = this;
+                                    this.setFillColor("#f8b992");*/
+                                    getCityTID(this);
+                                });
+                                label.polygon = ply;
+                                label.addEventListener("click", function (type, target, point, pixel) {
+                                   /* //首先重置所有面
+                                    if (currentRegionOverlayer != null) {
+                                        currentRegionOverlayer.setFillColor("#fff");
+                                    }
+                                    currentRegionOverlayer = this.polygon;
+                                    this.polygon.setFillColor("#f8b992");*/
+                                    getCityTID(this.polygon);
+                                });
+                                if (index == 4) {
+                                    ply.dispatchEvent("click");
+                                }
+                            }
+                        });
+                    })(index);
+                }
+            }
+    }
+
+    var remoteUrl = "${config.remoteUrl}";
+
+    function formatM(month) {
+        if (month < 10) {
+            return "0" + month;
+        } else {
+            return month;
+        }
+    }
+    function getCityTID(polygon) {
+        var overlays = map.getOverlays();
+        for (var i = 0; i < overlays.length; i++) {
+            var overlay = overlays[i];
+            if (overlay.code != undefined ) {
+                if (overlay.code == polygon.code) {
+                    overlay.setFillColor("#f8b992");
+                } else {
+                    overlay.setFillColor("#fff");
+                }
+            }
+            }
+
+        map.centerAndZoom( polygon.getBounds().getCenter(), 8);
+        var siteName = convertSiteName(polygon.code);
+        //获取最近3天数据
+        var d = new Date();
+        $(".B3 caption").html(polygon.name + "72小时高低潮汐预报");
+        var curDay = d.getFullYear() + "-" + formatM((d.getMonth() + 1))+ "-";
+        if (d.getDate() < 10) {
+            curDay += "0"
+        }
+        curDay += d.getDate();
+        //获取当前日期数据
+        $.get(remoteUrl + "?" + "getData" + "&date=" + curDay + "&factor=TID", function(data) {
+           //获取该市数据
+            var datas = data[0].datas;
+            processDS(datas, siteName, curDay,0);
+        });
+        d.setDate(d.getDate() + 1);
+        var tomDay = d.getFullYear() + "-" + formatM((d.getMonth() + 1))+ "-";
+        if (d.getDate() < 10) {
+            tomDay += "0"
+        }
+        tomDay += d.getDate();
+        $.get(remoteUrl + "?" + "getData" + "&date=" + tomDay + "&factor=TID", function(data) {
+            var datas = data[0].datas;
+            processDS(datas, siteName, tomDay,1);
+        });
+        d.setDate(d.getDate() + 1);
+        var aftDay = d.getFullYear() + "-" + formatM((d.getMonth() + 1)) + "-";
+        if (d.getDate() < 10) {
+            aftDay += "0"
+        }
+        aftDay += d.getDate();
+        $.get(remoteUrl + "?" + "getData" + "&date=" + aftDay + "&factor=TID", function(data) {
+            var datas = data[0].datas;
+            processDS(datas, siteName, aftDay,2);
+        });
+    }
+
+    function processDS(ds, siteName, day, index) {
+        var $table = $(".B3");
+        var html = "";
+        for (var i = 0; i < ds.length; i++) {
+            var d = ds[i];
+            if (d.zhandianName === siteName) {
+                html += "<td class='td02' style='background-color:#e8f4ff;'>" + day + "</td>";
+                var firstMax = "";
+                var secondMax = "";
+                var firstMin = "";
+                var secondMin = "";
+                var firstGaochao = d.firstGaochao;
+                var secondGaochao = d.secondGaochao;
+                //判断第一次和第二次哪个大小
+                if (parseInt(firstGaochao) > parseInt(secondGaochao)) {
+                    firstMax += "<td class='td02' style='background-color:#e8f4ff;'>" +  formatTime(d.firstGaochaoTime) + "</td><td class='td02' style='background-color:#e8f4ff;'>" + d.firstGaochao + "</td>";
+                    firstMin = "<td class='td02' style='background-color:#e8f4ff;'>" +  formatTime(d.secondGaochaoTime) + "</td><td class='td02' style='background-color:#e8f4ff;'>" + d.secondGaochao + "</td>";
+                } else {
+                    firstMin += "<td class='td02' style='background-color:#e8f4ff;'>" +  formatTime(d.firstGaochaoTime) + "</td><td class='td02' style='background-color:#e8f4ff;'>" + d.firstGaochao + "</td>";
+                    firstMax = "<td class='td02' style='background-color:#e8f4ff;'>" +  formatTime(d.secondGaochaoTime) + "</td><td class='td02' style='background-color:#e8f4ff;'>" + d.secondGaochao + "</td>";
+                }
+
+                var threeGaochao = d.threeGaochao;
+                var fourGaochaoTime = d.fourGaochao;
+                if (parseInt( threeGaochao) > parseInt(fourGaochaoTime)) {
+                    secondMax += "<td class='td02' style='background-color:#e8f4ff;'>" +  formatTime(d.threeGaochaoTime) + "</td><td class='td02' style='background-color:#e8f4ff;'>" + d.threeGaochao + "</td>";
+                    secondMin = "<td class='td02' style='background-color:#e8f4ff;'>" +  formatTime(d.fourGaochaoTime) + "</td><td class='td02' style='background-color:#e8f4ff;'>" + d.fourGaochao + "</td>";
+                } else {
+                    secondMin += "<td class='td02' style='background-color:#e8f4ff;'>" +  formatTime(d.threeGaochaoTime) + "</td><td class='td02' style='background-color:#e8f4ff;'>" + d.threeGaochao + "</td>";
+                    secondMax = "<td class='td02' style='background-color:#e8f4ff;'>" +  formatTime(d.fourGaochaoTime) + "</td><td class='td02' style='background-color:#e8f4ff;'>" + d.fourGaochao + "</td>";
+                }
+                html += firstMax;
+                html += secondMax;
+                html += firstMin;
+                html += secondMin;
+            }
+        }
+        var $tr = $table.find("tbody").find("tr").eq(index);
+        $tr.empty();
+        $tr.append(html);
+        var $tbody = $table.find("tbody");
+        $tbody.find("td").each(function(index,e) {
+            if ($(this).html() === "" || $(this).html() === " ") {
+                $(this).html("/");
+            }
+        });
+    }
+    function formatTime(time) {
+        if (time == null) {
+            return "";
+        }
+        var str = "";
+        if (time.length == 4) {
+            str += time.substr(0, 2);
+            str += "时";
+            str += time.substr(2, 4);
+            str += "分";
+        }
+        return str;
     }
 </script>
 </body>

@@ -5,6 +5,9 @@
 <html>
 <head>
 <title>渔业安全预警报系统</title>
+	<c:if test="${type eq 'TID'}">
+		<link rel="stylesheet" href="${ctx}/resources/tablecloth/tablecloth.css" />
+	</c:if>
 </head>
 <body>
 <div class="main">
@@ -45,18 +48,123 @@
 	var method = "${config.pictureMethod}";
     var pictures = [];
 	function getData(date) {
-	    $.get(remoteUrl + "?" + method + "&date=" + date + "&factor=" + type, function(data) {
-            if (clearIntervalId != null) {
-                clearInterval(clearIntervalId);
-                clearIntervalId = null;
-            }
-	        pictures = [];
-	        var datas = data[0].datas;
-	        for (var i = 0; i < datas.length; i++) {
-	            pictures.push(datas[i].pictureUrl);
-            }
-            getPicture(0);
-        } );
+	    if (type != "TID") {
+            $.get(remoteUrl + "?" + method + "&date=" + date + "&factor=" + type, function(data) {
+                if (clearIntervalId != null) {
+                    clearInterval(clearIntervalId);
+                    clearIntervalId = null;
+                }
+                pictures = [];
+                var datas = data[0].datas;
+                for (var i = 0; i < datas.length; i++) {
+                    pictures.push(datas[i].pictureUrl);
+                }
+                getPicture(0);
+            } );
+		} else {
+            $.get(remoteUrl + "?" + "getData" + "&date=" + date + "&factor=TID", function(data) {
+				$(".right").empty();
+				//生成折线图和表格
+				var ds = data[0].datas;
+				var $chart = $("<div>");
+				$chart.css({"width":700,height:300});
+                $chart.attr("id", "chart_div");
+                $chart.appendTo($(".right"));
+                var myChart = echarts.init(document.getElementById('chart_div'));
+                // 指定图表的配置项和数据
+                // 使用刚指定的配置项和数据显示图表。
+				var legend = [];
+				var series = [];
+				for (var i = 0; i < ds.length; i++) {
+                    var d = ds[i];
+                    d.zhandianName = convertCityName(d.zhandianName);
+                    if (d.zhandianName === "芷锚湾") {
+                        continue;
+					}
+                    legend.push(d.zhandianName);
+                    var serie = {
+                        name:d.zhandianName,
+                        type:'line',
+                        data:[d.zeroh, d.oneh, d.twoh, d.threeh, d.fourh, d.fiveh, d.sixh, d.sevenh, d.eighth, d.nineh, d.tenh, d.elevenh, d.twelveh, d.thirteenh, d.fourteenh, d.fifteenh, d.sixteenh, d.seventeenh, d.eighteenh, d.nineteenh, d.twentyh, d.twentyOneh, d.twentyTwoh, d.twentyThreeh],
+					};
+                    series.push(serie);
+				}
+                option = {
+                    title: {
+                        text: '24小时天文潮预报'
+                    },
+                    tooltip: {
+                        trigger: 'axis'
+                    },
+                    legend: {data:legend, top:25},
+
+                    xAxis:  {
+                        type: 'category',
+                        boundaryGap: false,
+                        data: ['0时','1时','2时','3时','4时','5时','6时','7时','8时','9时','10时','11时','12时','13时','14时','15时','16时','17时','18时','19时','20时','21时','22时','23时']
+                    },
+                    yAxis: {
+                        type: 'value',
+                        axisLabel: {
+                            formatter: '{value} CM'
+                        }
+                    },
+                    series: series
+                };
+                myChart.setOption(option);
+
+                //创建表格
+				var $table = $("<table class='table'>");
+				var html = "<thead><tr><th rowspan='2'>城市</th><th colspan='2'>第一次高潮</th><th colspan='2'>第二次高潮</th><th colspan='2'>第一次低潮</th><th colspan='2'>第二次低潮</th></tr>";
+				html += "<tr><th>潮时</th><th>潮高(CM)</th><th>潮时</th><th>潮高(CM)</th><th>潮时</th><th>潮高(CM)</th><th>潮时</th><th>潮高(CM)</th></thead>";
+                html += "<tbody>";
+				for (var i = 0; i < ds.length; i++) {
+                    var d = ds[i];
+                    d.zhandianName = convertCityName(d.zhandianName);
+                    if (d.zhandianName === "芷锚湾") {
+                        continue;
+                    }
+                    html += "<tr><td>" + (d.zhandianName) + "</td>";
+                    var firstMax = "";
+                    var secondMax = "";
+                    var firstMin = "";
+                    var secondMin = "";
+                    var firstGaochao = d.firstGaochao;
+                    var secondGaochao = d.secondGaochao;
+                    //判断第一次和第二次哪个大小
+					if (parseInt(firstGaochao) > parseInt(secondGaochao)) {
+                        firstMax += "<td>" +  formatTime(d.firstGaochaoTime) + "</td><td>" + d.firstGaochao + "</td>";
+                        firstMin = "<td>" +  formatTime(d.secondGaochaoTime) + "</td><td>" + d.secondGaochao + "</td>";
+                    } else {
+                        firstMin += "<td>" +  formatTime(d.firstGaochaoTime) + "</td><td>" + d.firstGaochao + "</td>";
+                        firstMax = "<td>" +  formatTime(d.secondGaochaoTime) + "</td><td>" + d.secondGaochao + "</td>";
+                    }
+
+                    var threeGaochao = d.threeGaochao;
+                    var fourGaochaoTime = d.fourGaochao;
+                    if (parseInt( threeGaochao) > parseInt(fourGaochaoTime)) {
+                        secondMax += "<td>" +  formatTime(d.threeGaochaoTime) + "</td><td>" + d.threeGaochao + "</td>";
+                        secondMin = "<td>" +  formatTime(d.fourGaochaoTime) + "</td><td>" + d.fourGaochao + "</td>";
+                    } else {
+                        secondMin += "<td>" +  formatTime(d.threeGaochaoTime) + "</td><td>" + d.threeGaochao + "</td>";
+                        secondMax = "<td>" +  formatTime(d.fourGaochaoTime) + "</td><td>" + d.fourGaochao + "</td>";
+                    }
+                    html += firstMax;
+                    html += secondMax;
+                    html += firstMin;
+                    html += secondMin;
+                }
+                html += "</tbody>";
+				$table.append(html)
+                $table.appendTo($(".right"));
+                var $tbody = $table.find("tbody")
+					$tbody.find("td").each(function(index,e) {
+                    if ($(this).html() === "" || $(this).html() === " ") {
+                        $(this).html("/");
+					}
+				});
+            } );
+		}
     }
 
     function getPicture(hour) {
@@ -69,7 +177,9 @@
     }
 
     $(document).ready(function() {
-        initTable();
+        if (type != "TID") {
+            initTable();
+		}
         $("li[class=biaodan]").click(function() {
             $("li").each(function() {
                if($(this).hasClass("biaodanclick")) {
@@ -144,6 +254,19 @@
         }
     }
 
+    function formatTime(time) {
+        if (time == null) {
+            return "";
+		}
+		var str = "";
+		if (time.length == 4) {
+            str += time.substr(0, 2);
+            str += "时";
+            str += time.substr(2, 4);
+            str += "分";
+		}
+		return str;
+	}
 </script>
 </body>
 </html>

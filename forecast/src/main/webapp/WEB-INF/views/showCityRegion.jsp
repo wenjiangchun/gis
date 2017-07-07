@@ -40,15 +40,12 @@
     var regionCode = "";
     var currentRegionOverlayer;
 
-    //map.enableScrollWheelZoom();
-    //map.setMinZoom(8);
-    //map.setMaxZoom(10);
-
+    var defaultPolygon = null;
     $(function() {
         //加载区域位置信息
         map.centerAndZoom(new BMap.Point(122.1, 40.3), 8);
         getRegion();
-        //获取第一个要素场图信息
+
     });
     /**
      * 加载城市位置信息
@@ -104,7 +101,7 @@
                                     //this.setStrokeColor("red");
                                     //获取区域当前时间点数据
                                     //registerInfoWindow(this);
-                                    registerInfoWindow(this);
+                                    //registerInfoWindow(this);
                                 });
                                 ply.addEventListener("mouseout", function (type, target, point, pixel) {
                                     //this.setStrokeColor("#2f23ff");
@@ -121,14 +118,30 @@
                                     registerInfoWindow(this);
                                     getData(this,null);
                                 });
+                                label.polygon = ply;
+                                label.addEventListener("click", function (type, target, point, pixel) {
+                                    //首先重置所有面
+                                    if (currentRegionOverlayer != null) {
+                                        //currentRegionOverlayer.setStrokeColor("#2f23ff");
+                                        currentRegionOverlayer.setFillColor("#fff");
+                                    }
+                                    currentRegionOverlayer = this.polygon;
+                                    //this.setStrokeColor("red");
+                                    this.polygon.setFillColor("#f8b992");
+                                    registerInfoWindow(this.polygon);
+                                    getData(this.polygon,null);
+                                });
+                                if (index == 4) {
+                                    ply.dispatchEvent("click");
+                                }
                             }
                             // map.setViewport(pointArray);    //调整视野
                             //addlabel();
+
                         });
                     })(index);
                 }
             }
-            //init();
         });
     }
 

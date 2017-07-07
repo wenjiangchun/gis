@@ -10,3 +10,5 @@ $(function() {
     map.setMaxZoom(10);
     map.centerAndZoom(new BMap.Point(120, 40), 9);
 });
+
+

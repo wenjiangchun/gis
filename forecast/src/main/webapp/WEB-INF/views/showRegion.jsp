@@ -96,6 +96,7 @@
                                 map.addOverlay(label);
                                 marker.code = region.code;
                                 marker.name = region.name;
+                                marker.type = "marker";
                                 marker.addEventListener("click", function (type, target, point, pixel) {
                                     getData(this, this.getPosition());
                                 });
@@ -129,6 +130,7 @@
                                 map.addOverlay(label);
                                 polyline.code = region.code;
                                 polyline.name = region.name;
+                                polyline.type = "polyline";
                                 polyline.addEventListener("click", function (type, target, point, pixel) {
                                     getData(this, this.getBounds().getCenter());
                                 });
@@ -164,6 +166,16 @@
         clear();
         //getRegionPicture(factor, regionCode);
         getRegionData();
+        var overlays = map.getOverlays();
+        for (var i = 0; i < overlays.length; i++) {
+            if (overlays[i].type == "marker") {
+                overlays[i].setAnimation(null);
+            }
+           //
+        }
+        if (overlayer.type == "marker") {
+            overlayer.setAnimation(BMAP_ANIMATION_BOUNCE);
+        }
     }
 
 </script>

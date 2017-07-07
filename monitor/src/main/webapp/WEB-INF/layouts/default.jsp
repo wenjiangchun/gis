@@ -11,6 +11,7 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
 	<link rel="stylesheet" href="${ctx}/resources/style/css/yyxt_m.css" />
 	<script type="text/javascript" src="${ctx}/resources/jquery/jquery.min.js"></script>
+	<script type="text/javascript" src="${ctx}/resources/echarts/echarts.min.js"></script>
 	<sitemesh:write property='head' />
 </head>
 

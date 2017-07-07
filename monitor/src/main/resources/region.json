@@ -122,5 +122,71 @@
     "name": "海洋岛渔场",
     "code": "LNHYDYCH",
     "level": 3
+  },
+  {
+    "pointList": [
+      {
+        "x": "121.6833",
+        "y": "38.8667"
+      }
+    ],
+    "name": "大连市",
+    "code": "LNDLS",
+    "level": 2
+  },
+  {
+    "pointList": [
+      {
+        "x": "124.1667",
+        "y": "39.8333"
+      }
+    ],
+    "name": "丹东市",
+    "code": "LNDDS",
+    "level": 2
+  },
+  {
+    "pointList": [
+      {
+        "x": "121.1199",
+        "y": "40.8073"
+      }
+    ],
+    "name": "锦州市",
+    "code": "LNJZS",
+    "level": 2
+  },
+  {
+    "pointList": [
+      {
+        "x": "122.1",
+        "y": "40.3"
+      }
+    ],
+    "name": "营口市",
+    "code": "LNYKS",
+    "level": 2
+  },
+  {
+    "pointList": [
+      {
+        "x": "121.9088",
+        "y": "40.7862"
+      }
+    ],
+    "name": "盘锦市",
+    "code": "LNPJS",
+    "level": 2
+  },
+  {
+    "pointList": [
+      {
+        "x": "121.0167",
+        "y": "40.7"
+      }
+    ],
+    "name": "葫芦岛市",
+    "code": "LNHLDS",
+    "level": 2
   }
 ]
